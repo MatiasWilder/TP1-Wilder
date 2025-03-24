@@ -1,94 +1,58 @@
-function CalcularPromedio(Mat,Len,Efs){
-    return (Mat + Len + Efs) /3;
+document.addEventListener("DOMContentLoaded", function () {
+    const matInput = document.getElementById("mat");
+    const lenInput = document.getElementById("len");
+    const efsInput = document.getElementById("efs");
+    const resultDiv = document.createElement("div");
+    document.body.appendChild(resultDiv);
 
-}
-
-function CalcularMayorNota(Mat,Len,Efs) {
-
-    if(Mat > Len){
-        if(Mat>Efs){
-            alert('La mayor nota es matemática con un ' + Mat)
-        }
-    }else if(Len > Mat){
-        if(Len>Efs){
-            alert('La mayor nota es Lengua con un ' + Len)
-        }
-    }else if(Efs>Mat){
-        if(Efs>Len){
-            alert('La mayor nota es EFSI con un ' + Efs)
+    function validarNota(input) {
+        let valor = parseInt(input.value);
+        if (isNaN(valor) || valor < 1 || valor > 10) {
+            input.style.borderColor = "red";
+        } else {
+            input.style.borderColor = "green";
         }
     }
-}
 
+    [matInput, lenInput, efsInput].forEach(input => {
+        input.addEventListener("input", function () {
+            validarNota(input);
+        });
+    });
 
-function ValidarNotas(Mat,Len,Efs){
-
-    if(Mat>10 || Mat<1) {
-        alert('Hay un número mayor a 10 o menor a 1')
-
+    function obtenerNotas() {
+        let mat = parseInt(matInput.value);
+        let len = parseInt(lenInput.value);
+        let efs = parseInt(efsInput.value);
+        
+        if (isNaN(mat) || isNaN(len) || isNaN(efs)) {
+            alert("Todos los campos son obligatorios y deben contener valores entre 1 y 10.");
+            return null;
+        }
+        return { mat, len, efs };
     }
 
-    if(Len>10 || Len<1 ) {
-        alert('Hay un número mayor a 10 o menor a 1')
-    
-        }
+    function calcularPromedio() {
+        let notas = obtenerNotas();
+        if (!notas) return;
+        let promedio = (notas.mat + notas.len + notas.efs) / 3;
+        resultDiv.innerText = `Promedio: ${promedio.toFixed(2)}`;
+        resultDiv.style.color = promedio >= 6 ? "green" : "red";
+    }
 
-    if(Efs>10 || Efs<1) {
-        alert('Hay un número mayor a 10 o menor a 1')
-        
-            }
+    function calcularMayorNota() {
+        let notas = obtenerNotas();
+        if (!notas) return;
+        let maxNota = Math.max(notas.mat, notas.len, notas.efs);
+        let materias = [];
+        if (notas.mat === maxNota) materias.push("Matemática");
+        if (notas.len === maxNota) materias.push("Lengua");
+        if (notas.efs === maxNota) materias.push("EFSI");
+        resultDiv.innerText = `Mayor nota en: ${materias.join(", ")} (${maxNota})`;
+        resultDiv.style.color = "blue";
+    }
 
-
-}
-const ColMat = document.getElementById('mat');
-ColMat.addEventListener('input', function(color) {
-   
-
+    document.getElementById("prom").addEventListener("click", calcularPromedio);
+    document.getElementById("may").addEventListener("click", calcularMayorNota);
+    document.getElementById("env").addEventListener("click", obtenerNotas);
 });
-
-miInput.addEventListener('len', function(event) {
-    // Mostramos el valor del input en la consola cada vez que cambia
-    console.log('Valor del input:', event.target.value);
-});
-
-miInput.addEventListener('efs', function(event) {
-    // Mostramos el valor del input en la consola cada vez que cambia
-    console.log('Valor del input:', event.target.value);
-});
-        
-
-
-
-document.querySelector("#may").addEventListener("click", () => {
-    let Mat = parseInt(document.getElementById("mat").value);
-    let Len = parseInt(document.getElementById("len").value);
-    let Efs = parseInt(document.getElementById("efs").value);
-
-    CalcularMayorNota(Mat,Len,Efs);
-})
-
-
-
-
-
-document.querySelector("#env").addEventListener("click", () => {
-    let Mat = parseInt(document.getElementById("mat").value);
-    let Len = parseInt(document.getElementById("len").value);
-    let Efs = parseInt(document.getElementById("efs").value);
-
-
-
-       ValidarNotas(Mat,Len,Efs);
-
-})
-
-document.querySelector("#prom").addEventListener("click", () => {
-    let Mat = parseInt(document.getElementById("mat").value);
-    let Len = parseInt(document.getElementById("len").value);
-    let Efs = parseInt(document.getElementById("efs").value);
-
-    var Pro = CalcularPromedio (Mat,Len,Efs);
-    alert ('El promedio de las notas es ' + Pro);
-
-
-})
